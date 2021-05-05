@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using MinhasTarefasAPI.Models;
 using MinhasTarefasAPI.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MinhasTarefasAPI.Controllers
@@ -37,10 +41,10 @@ namespace MinhasTarefasAPI.Controllers
                 if(usuario != null)
                 {
                     //Login no identity
-                    _signInManager.SignInAsync(usuario,false);
-                
+                    //_signInManager.SignInAsync(usuario,false);
+
                     //retornar token (JWT)
-                    return Ok(usuario);
+                    return Ok(BuildToken(usuario));
                 }
                 else
                 {
@@ -52,6 +56,32 @@ namespace MinhasTarefasAPI.Controllers
                 return UnprocessableEntity(ModelState);
             }
         }
+
+        private object BuildToken(ApplicationUSER usuario)
+        {
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Email,usuario.Email)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("minha-api-aprendizado@"));
+            var singn = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+            var exp = DateTime.UtcNow.AddHours(1);
+
+            JwtSecurityToken token = new JwtSecurityToken(
+
+                    issuer: null,
+                    audience: null,
+                    claims: claims,
+                    expires: exp,
+                    signingCredentials: singn
+                );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return new { token = tokenString, expiration = exp };
+        }
+
         [HttpPost("")]
         public ActionResult Cadastrar([FromBody] UsuarioDTO usuarioDTO)
         {
