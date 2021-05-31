@@ -257,6 +257,40 @@ namespace MinhasTarefasAPI.Migrations
                     b.ToTable("Tarefas");
                 });
 
+            modelBuilder.Entity("MinhasTarefasAPI.Models.Token", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Atualizado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Criado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpirationRefreshToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Ultilizado")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UsuarioID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioID");
+
+                    b.ToTable("Token");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -317,9 +351,20 @@ namespace MinhasTarefasAPI.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("MinhasTarefasAPI.Models.Token", b =>
+                {
+                    b.HasOne("MinhasTarefasAPI.Models.ApplicationUSER", "Usuario")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UsuarioID");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("MinhasTarefasAPI.Models.ApplicationUSER", b =>
                 {
                     b.Navigation("Tarefas");
+
+                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MinhasTarefasAPI.Models;
-using MinhasTarefasAPI.Repositories.Contracts;
+using MinhasTarefasAPI.V1.Models;
+using MinhasTarefasAPI.V1.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,7 @@ namespace MinhasTarefasAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class TarefaController : ControllerBase
     {
         private readonly ITarefaRepository _tarefaRepository;
@@ -39,12 +40,5 @@ namespace MinhasTarefasAPI.Controllers
 
 //            return Ok(tarefas);
         }
-        [HttpGet("modelo")]
-        public ActionResult modelo()
-        {
-            return Ok(new Tarefa());
-        }
-
-
     }
 }

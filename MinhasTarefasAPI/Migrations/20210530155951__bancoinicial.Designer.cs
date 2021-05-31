@@ -9,8 +9,8 @@ using MinhasTarefasAPI.Database;
 namespace MinhasTarefasAPI.Migrations
 {
     [DbContext(typeof(MinhasTarefasDBContext))]
-    [Migration("20210402023510_mbanco")]
-    partial class mbanco
+    [Migration("20210530155951__bancoinicial")]
+    partial class _bancoinicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -215,7 +215,7 @@ namespace MinhasTarefasAPI.Migrations
 
             modelBuilder.Entity("MinhasTarefasAPI.Models.Tarefa", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("IdtarefaApi")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -234,6 +234,12 @@ namespace MinhasTarefasAPI.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("Excluido")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IdtarefaApp")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Local")
                         .HasColumnType("TEXT");
 
@@ -246,11 +252,45 @@ namespace MinhasTarefasAPI.Migrations
                     b.Property<string>("UsuarioID")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Id");
+                    b.HasKey("IdtarefaApi");
 
                     b.HasIndex("UsuarioID");
 
                     b.ToTable("Tarefas");
+                });
+
+            modelBuilder.Entity("MinhasTarefasAPI.Models.Token", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Atualizado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Criado")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("ExpirationRefreshToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Ultilizado")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UsuarioID")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UsuarioID");
+
+                    b.ToTable("Token");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -313,9 +353,20 @@ namespace MinhasTarefasAPI.Migrations
                     b.Navigation("Usuario");
                 });
 
+            modelBuilder.Entity("MinhasTarefasAPI.Models.Token", b =>
+                {
+                    b.HasOne("MinhasTarefasAPI.Models.ApplicationUSER", "Usuario")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UsuarioID");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("MinhasTarefasAPI.Models.ApplicationUSER", b =>
                 {
                     b.Navigation("Tarefas");
+
+                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }

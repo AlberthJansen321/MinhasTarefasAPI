@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using MinhasTarefasAPI.Models;
-using MinhasTarefasAPI.Repositories.Contracts;
+using MinhasTarefasAPI.V1.Models;
+using MinhasTarefasAPI.V1.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MinhasTarefasAPI.Repositories
+namespace MinhasTarefasAPI.V1.Repositories
 {
     public class UsuarioRepository : IUsuarioRepository
     {
@@ -50,6 +50,11 @@ namespace MinhasTarefasAPI.Repositories
 
             }
 
-        }  
+        }
+
+        public ApplicationUSER obter(string id)
+        {
+            return _userManager.FindByIdAsync(id).Result;
+        }
     }
 }

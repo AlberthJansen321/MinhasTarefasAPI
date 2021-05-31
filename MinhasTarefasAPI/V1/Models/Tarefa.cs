@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MinhasTarefasAPI.Models
+namespace MinhasTarefasAPI.V1.Models
 {
     public class Tarefa
     {
@@ -20,7 +20,7 @@ namespace MinhasTarefasAPI.Models
         public bool Concluido { get; set; }
         public bool Excluido { get; set; }
         public DateTime Criado { get; set; }
-        public DateTime Atualizado { get; set; }
+        public DateTime? Atualizado { get; set; }
 
 
         [ForeignKey("Usuario")]

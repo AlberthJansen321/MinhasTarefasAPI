@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MinhasTarefasAPI.Migrations
 {
-    public partial class mbanco : Migration
+    public partial class _bancoinicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -157,23 +157,50 @@ namespace MinhasTarefasAPI.Migrations
                 name: "Tarefas",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    IdtarefaApi = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    IdtarefaApp = table.Column<int>(type: "INTEGER", nullable: false),
                     Titulo = table.Column<string>(type: "TEXT", nullable: true),
                     DataHora = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Local = table.Column<string>(type: "TEXT", nullable: true),
                     Descricao = table.Column<string>(type: "TEXT", nullable: true),
                     Tipo = table.Column<string>(type: "TEXT", nullable: true),
                     Concluido = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Excluido = table.Column<bool>(type: "INTEGER", nullable: false),
                     Criado = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Atualizado = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UsuarioID = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tarefas", x => x.Id);
+                    table.PrimaryKey("PK_Tarefas", x => x.IdtarefaApi);
                     table.ForeignKey(
                         name: "FK_Tarefas_AspNetUsers_UsuarioID",
+                        column: x => x.UsuarioID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Token",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    RefreshToken = table.Column<string>(type: "TEXT", nullable: true),
+                    UsuarioID = table.Column<string>(type: "TEXT", nullable: true),
+                    Ultilizado = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ExpirationRefreshToken = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Criado = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Atualizado = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Token", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Token_AspNetUsers_UsuarioID",
                         column: x => x.UsuarioID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -221,6 +248,11 @@ namespace MinhasTarefasAPI.Migrations
                 name: "IX_Tarefas_UsuarioID",
                 table: "Tarefas",
                 column: "UsuarioID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Token_UsuarioID",
+                table: "Token",
+                column: "UsuarioID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -242,6 +274,9 @@ namespace MinhasTarefasAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tarefas");
+
+            migrationBuilder.DropTable(
+                name: "Token");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
